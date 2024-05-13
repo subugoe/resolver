@@ -61,25 +61,15 @@ public class Resolver extends HttpServlet {
 
         LinkedList<LocalResolverConnectorThread> allThreads = new LinkedList<LocalResolverConnectorThread>();
 
-        //	 get parameters
-        logger.info("SUBResolver: received a request");
-
-        ArrayList<String> params = Collections.list(request.getParameterNames());
-
-        for (String p : params) {
-            logger.debug("SUBResolver: parameter=" + p);
-        }
-
-        if (params.isEmpty()) {
+        //	 get query string
+        String parameter = request.getQueryString();
+        if (parameter == null) {
             // error handling; no parameter/identifier given
             logger.warn("SUBResolver: didn't receive a parameter");
             return;
-        } else if (params.size() > 1) {
-            // invalid request
-            logger.warn("SUBResolver: wrong number of parameters");
-            return;
         }
-        String parameter = params.get(0);
+
+        logger.info("SUBResolver: received a request for " + parameter);
 
         // just ask all LocalResolver 
         // every connection in done in a seperate thread
